@@ -1,0 +1,739 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ExpenseTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblAccount">
+          <Key>
+            <PropertyRef Name="aId" />
+          </Key>
+          <Property Name="aId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cId" Type="int" />
+          <Property Name="openDate" Type="date" />
+          <Property Name="closeDate" Type="date" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblCustomer">
+          <Key>
+            <PropertyRef Name="cId" />
+          </Key>
+          <Property Name="cId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="uId" Type="int" />
+        </EntityType>
+        <EntityType Name="tblExpenseCategory">
+          <Key>
+            <PropertyRef Name="ecId" />
+          </Key>
+          <Property Name="ecId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblExpenseItem">
+          <Key>
+            <PropertyRef Name="eiId" />
+          </Key>
+          <Property Name="eiId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Cost" Type="money" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ecId" Type="int" Nullable="false" />
+          <Property Name="uId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblExpenseRecord">
+          <Key>
+            <PropertyRef Name="erId" />
+          </Key>
+          <Property Name="erId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MonthId" Type="int" Nullable="false" />
+          <Property Name="PaymentTypeId" Type="int" Nullable="false" />
+          <Property Name="Cost" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="ecId" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="expitemId" Type="int" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblMonth">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MonthName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="uId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPaymentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaymentTypeName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="uId" />
+          </Key>
+          <Property Name="uId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FullName" Type="varchar" MaxLength="50" />
+          <Property Name="UserType" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__tblAccount__cId__44FF419A">
+          <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblAccount" Type="Self.tblAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCustomer">
+              <PropertyRef Name="cId" />
+            </Principal>
+            <Dependent Role="tblAccount">
+              <PropertyRef Name="cId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblCustomer__uId__38996AB5">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblCustomer">
+              <PropertyRef Name="uId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__expit__5EBF139D">
+          <End Role="tblExpenseItem" Type="Self.tblExpenseItem" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblExpenseRecord" Type="Self.tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblExpenseItem">
+              <PropertyRef Name="eiId" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="expitemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__Month__5FB337D6">
+          <End Role="tblMonth" Type="Self.tblMonth" Multiplicity="1" />
+          <End Role="tblExpenseRecord" Type="Self.tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMonth">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="MonthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__Payme__60A75C0F">
+          <End Role="tblPaymentType" Type="Self.tblPaymentType" Multiplicity="1" />
+          <End Role="tblExpenseRecord" Type="Self.tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPaymentType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__UserI__4BAC3F29">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblExpenseCategory" Type="Self.tblExpenseCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblExpenseCategory">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__UserI__5CD6CB2B">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblExpenseRecord" Type="Self.tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpense__ecId__5441852A">
+          <End Role="tblExpenseCategory" Type="Self.tblExpenseCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblExpenseItem" Type="Self.tblExpenseItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblExpenseCategory">
+              <PropertyRef Name="ecId" />
+            </Principal>
+            <Dependent Role="tblExpenseItem">
+              <PropertyRef Name="ecId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpense__ecId__5DCAEF64">
+          <End Role="tblExpenseCategory" Type="Self.tblExpenseCategory" Multiplicity="0..1" />
+          <End Role="tblExpenseRecord" Type="Self.tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblExpenseCategory">
+              <PropertyRef Name="ecId" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="ecId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpenseI__uId__534D60F1">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblExpenseItem" Type="Self.tblExpenseItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblExpenseItem">
+              <PropertyRef Name="uId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblMonth__uId__3B75D760">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblMonth" Type="Self.tblMonth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblMonth">
+              <PropertyRef Name="uId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblPaymen__UserI__4222D4EF">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblPaymentType" Type="Self.tblPaymentType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblPaymentType">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ExpenseTrackerModelStoreContainer">
+          <EntitySet Name="tblAccount" EntityType="Self.tblAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCustomer" EntityType="Self.tblCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblExpenseCategory" EntityType="Self.tblExpenseCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblExpenseItem" EntityType="Self.tblExpenseItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblExpenseRecord" EntityType="Self.tblExpenseRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMonth" EntityType="Self.tblMonth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPaymentType" EntityType="Self.tblPaymentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUser" EntityType="Self.tblUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__tblAccount__cId__44FF419A" Association="Self.FK__tblAccount__cId__44FF419A">
+            <End Role="tblCustomer" EntitySet="tblCustomer" />
+            <End Role="tblAccount" EntitySet="tblAccount" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblCustomer__uId__38996AB5" Association="Self.FK__tblCustomer__uId__38996AB5">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblCustomer" EntitySet="tblCustomer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__expit__5EBF139D" Association="Self.FK__tblExpens__expit__5EBF139D">
+            <End Role="tblExpenseItem" EntitySet="tblExpenseItem" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__Month__5FB337D6" Association="Self.FK__tblExpens__Month__5FB337D6">
+            <End Role="tblMonth" EntitySet="tblMonth" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__Payme__60A75C0F" Association="Self.FK__tblExpens__Payme__60A75C0F">
+            <End Role="tblPaymentType" EntitySet="tblPaymentType" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__UserI__4BAC3F29" Association="Self.FK__tblExpens__UserI__4BAC3F29">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblExpenseCategory" EntitySet="tblExpenseCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__UserI__5CD6CB2B" Association="Self.FK__tblExpens__UserI__5CD6CB2B">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpense__ecId__5441852A" Association="Self.FK__tblExpense__ecId__5441852A">
+            <End Role="tblExpenseCategory" EntitySet="tblExpenseCategory" />
+            <End Role="tblExpenseItem" EntitySet="tblExpenseItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpense__ecId__5DCAEF64" Association="Self.FK__tblExpense__ecId__5DCAEF64">
+            <End Role="tblExpenseCategory" EntitySet="tblExpenseCategory" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecord" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpenseI__uId__534D60F1" Association="Self.FK__tblExpenseI__uId__534D60F1">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblExpenseItem" EntitySet="tblExpenseItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblMonth__uId__3B75D760" Association="Self.FK__tblMonth__uId__3B75D760">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblMonth" EntitySet="tblMonth" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblPaymen__UserI__4222D4EF" Association="Self.FK__tblPaymen__UserI__4222D4EF">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblPaymentType" EntitySet="tblPaymentType" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ExpenseTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblAccount">
+          <Key>
+            <PropertyRef Name="aId" />
+          </Key>
+          <Property Name="aId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cId" Type="Int32" />
+          <Property Name="openDate" Type="DateTime" Precision="0" />
+          <Property Name="closeDate" Type="DateTime" Precision="0" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="tblCustomer" Relationship="Self.FK__tblAccount__cId__44FF419A" FromRole="tblAccount" ToRole="tblCustomer" />
+        </EntityType>
+        <EntityType Name="tblCustomer">
+          <Key>
+            <PropertyRef Name="cId" />
+          </Key>
+          <Property Name="cId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="uId" Type="Int32" />
+          <NavigationProperty Name="tblAccounts" Relationship="Self.FK__tblAccount__cId__44FF419A" FromRole="tblCustomer" ToRole="tblAccount" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK__tblCustomer__uId__38996AB5" FromRole="tblCustomer" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblExpenseCategory">
+          <Key>
+            <PropertyRef Name="ecId" />
+          </Key>
+          <Property Name="ecId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK__tblExpens__UserI__4BAC3F29" FromRole="tblExpenseCategory" ToRole="tblUser" />
+          <NavigationProperty Name="tblExpenseItems" Relationship="Self.FK__tblExpense__ecId__5441852A" FromRole="tblExpenseCategory" ToRole="tblExpenseItem" />
+          <NavigationProperty Name="tblExpenseRecords" Relationship="ExpenseTrackerModel.FK__tblExpense__ecId__5DCAEF64" FromRole="tblExpenseCategory" ToRole="tblExpenseRecord" />
+        </EntityType>
+        <EntityType Name="tblExpenseItem">
+          <Key>
+            <PropertyRef Name="eiId" />
+          </Key>
+          <Property Name="eiId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ecId" Type="Int32" Nullable="false" />
+          <Property Name="uId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblExpenseCategory" Relationship="Self.FK__tblExpense__ecId__5441852A" FromRole="tblExpenseItem" ToRole="tblExpenseCategory" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK__tblExpenseI__uId__534D60F1" FromRole="tblExpenseItem" ToRole="tblUser" />
+          <NavigationProperty Name="tblExpenseRecords" Relationship="ExpenseTrackerModel.FK__tblExpens__expit__5EBF139D" FromRole="tblExpenseItem" ToRole="tblExpenseRecord" />
+        </EntityType>
+        <EntityType Name="tblMonth">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MonthName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="uId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK__tblMonth__uId__3B75D760" FromRole="tblMonth" ToRole="tblUser" />
+          <NavigationProperty Name="tblExpenseRecords" Relationship="ExpenseTrackerModel.FK__tblExpens__Month__5FB337D6" FromRole="tblMonth" ToRole="tblExpenseRecord" />
+        </EntityType>
+        <EntityType Name="tblPaymentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblUser" Relationship="Self.FK__tblPaymen__UserI__4222D4EF" FromRole="tblPaymentType" ToRole="tblUser" />
+          <NavigationProperty Name="tblExpenseRecords" Relationship="ExpenseTrackerModel.FK__tblExpens__Payme__60A75C0F" FromRole="tblPaymentType" ToRole="tblExpenseRecord" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="uId" />
+          </Key>
+          <Property Name="uId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UserType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblCustomers" Relationship="Self.FK__tblCustomer__uId__38996AB5" FromRole="tblUser" ToRole="tblCustomer" />
+          <NavigationProperty Name="tblExpenseCategories" Relationship="Self.FK__tblExpens__UserI__4BAC3F29" FromRole="tblUser" ToRole="tblExpenseCategory" />
+          <NavigationProperty Name="tblExpenseItems" Relationship="Self.FK__tblExpenseI__uId__534D60F1" FromRole="tblUser" ToRole="tblExpenseItem" />
+          <NavigationProperty Name="tblMonths" Relationship="Self.FK__tblMonth__uId__3B75D760" FromRole="tblUser" ToRole="tblMonth" />
+          <NavigationProperty Name="tblPaymentTypes" Relationship="Self.FK__tblPaymen__UserI__4222D4EF" FromRole="tblUser" ToRole="tblPaymentType" />
+          <NavigationProperty Name="tblExpenseRecords" Relationship="ExpenseTrackerModel.FK__tblExpens__UserI__5CD6CB2B" FromRole="tblUser" ToRole="tblExpenseRecord" />
+        </EntityType>
+        <Association Name="FK__tblAccount__cId__44FF419A">
+          <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblAccount" Type="Self.tblAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCustomer">
+              <PropertyRef Name="cId" />
+            </Principal>
+            <Dependent Role="tblAccount">
+              <PropertyRef Name="cId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblCustomer__uId__38996AB5">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblCustomer" Type="Self.tblCustomer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblCustomer">
+              <PropertyRef Name="uId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__UserI__4BAC3F29">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblExpenseCategory" Type="Self.tblExpenseCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblExpenseCategory">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpense__ecId__5441852A">
+          <End Role="tblExpenseCategory" Type="Self.tblExpenseCategory" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblExpenseItem" Type="Self.tblExpenseItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblExpenseCategory">
+              <PropertyRef Name="ecId" />
+            </Principal>
+            <Dependent Role="tblExpenseItem">
+              <PropertyRef Name="ecId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpenseI__uId__534D60F1">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblExpenseItem" Type="Self.tblExpenseItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblExpenseItem">
+              <PropertyRef Name="uId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblMonth__uId__3B75D760">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblMonth" Type="Self.tblMonth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblMonth">
+              <PropertyRef Name="uId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblPaymen__UserI__4222D4EF">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblPaymentType" Type="Self.tblPaymentType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblPaymentType">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ExpenseTrackerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblAccounts" EntityType="Self.tblAccount" />
+          <EntitySet Name="tblCustomers" EntityType="Self.tblCustomer" />
+          <EntitySet Name="tblExpenseCategories" EntityType="Self.tblExpenseCategory" />
+          <EntitySet Name="tblExpenseItems" EntityType="Self.tblExpenseItem" />
+          <EntitySet Name="tblMonths" EntityType="Self.tblMonth" />
+          <EntitySet Name="tblPaymentTypes" EntityType="Self.tblPaymentType" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+          <AssociationSet Name="FK__tblAccount__cId__44FF419A" Association="Self.FK__tblAccount__cId__44FF419A">
+            <End Role="tblCustomer" EntitySet="tblCustomers" />
+            <End Role="tblAccount" EntitySet="tblAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblCustomer__uId__38996AB5" Association="Self.FK__tblCustomer__uId__38996AB5">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblCustomer" EntitySet="tblCustomers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__UserI__4BAC3F29" Association="Self.FK__tblExpens__UserI__4BAC3F29">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblExpenseCategory" EntitySet="tblExpenseCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpense__ecId__5441852A" Association="Self.FK__tblExpense__ecId__5441852A">
+            <End Role="tblExpenseCategory" EntitySet="tblExpenseCategories" />
+            <End Role="tblExpenseItem" EntitySet="tblExpenseItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpenseI__uId__534D60F1" Association="Self.FK__tblExpenseI__uId__534D60F1">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblExpenseItem" EntitySet="tblExpenseItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblMonth__uId__3B75D760" Association="Self.FK__tblMonth__uId__3B75D760">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblMonth" EntitySet="tblMonths" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblPaymen__UserI__4222D4EF" Association="Self.FK__tblPaymen__UserI__4222D4EF">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblPaymentType" EntitySet="tblPaymentTypes" />
+          </AssociationSet>
+          <EntitySet Name="tblExpenseRecords" EntityType="ExpenseTrackerModel.tblExpenseRecord" />
+          <AssociationSet Name="FK__tblExpense__ecId__5DCAEF64" Association="ExpenseTrackerModel.FK__tblExpense__ecId__5DCAEF64">
+            <End Role="tblExpenseCategory" EntitySet="tblExpenseCategories" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__expit__5EBF139D" Association="ExpenseTrackerModel.FK__tblExpens__expit__5EBF139D">
+            <End Role="tblExpenseItem" EntitySet="tblExpenseItems" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__Month__5FB337D6" Association="ExpenseTrackerModel.FK__tblExpens__Month__5FB337D6">
+            <End Role="tblMonth" EntitySet="tblMonths" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__Payme__60A75C0F" Association="ExpenseTrackerModel.FK__tblExpens__Payme__60A75C0F">
+            <End Role="tblPaymentType" EntitySet="tblPaymentTypes" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecords" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblExpens__UserI__5CD6CB2B" Association="ExpenseTrackerModel.FK__tblExpens__UserI__5CD6CB2B">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblExpenseRecord" EntitySet="tblExpenseRecords" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="tblExpenseRecord">
+          <Key>
+            <PropertyRef Name="erId" />
+          </Key>
+          <Property Name="erId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MonthId" Type="Int32" Nullable="false" />
+          <Property Name="PaymentTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="ecId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="expitemId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblExpenseCategory" Relationship="ExpenseTrackerModel.FK__tblExpense__ecId__5DCAEF64" FromRole="tblExpenseRecord" ToRole="tblExpenseCategory" />
+          <NavigationProperty Name="tblExpenseItem" Relationship="ExpenseTrackerModel.FK__tblExpens__expit__5EBF139D" FromRole="tblExpenseRecord" ToRole="tblExpenseItem" />
+          <NavigationProperty Name="tblMonth" Relationship="ExpenseTrackerModel.FK__tblExpens__Month__5FB337D6" FromRole="tblExpenseRecord" ToRole="tblMonth" />
+          <NavigationProperty Name="tblPaymentType" Relationship="ExpenseTrackerModel.FK__tblExpens__Payme__60A75C0F" FromRole="tblExpenseRecord" ToRole="tblPaymentType" />
+          <NavigationProperty Name="tblUser" Relationship="ExpenseTrackerModel.FK__tblExpens__UserI__5CD6CB2B" FromRole="tblExpenseRecord" ToRole="tblUser" />
+        </EntityType>
+        <Association Name="FK__tblExpense__ecId__5DCAEF64">
+          <End Type="ExpenseTrackerModel.tblExpenseCategory" Role="tblExpenseCategory" Multiplicity="0..1" />
+          <End Type="ExpenseTrackerModel.tblExpenseRecord" Role="tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblExpenseCategory">
+              <PropertyRef Name="ecId" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="ecId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__expit__5EBF139D">
+          <End Type="ExpenseTrackerModel.tblExpenseItem" Role="tblExpenseItem" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ExpenseTrackerModel.tblExpenseRecord" Role="tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblExpenseItem">
+              <PropertyRef Name="eiId" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="expitemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__Month__5FB337D6">
+          <End Type="ExpenseTrackerModel.tblMonth" Role="tblMonth" Multiplicity="1" />
+          <End Type="ExpenseTrackerModel.tblExpenseRecord" Role="tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMonth">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="MonthId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__Payme__60A75C0F">
+          <End Type="ExpenseTrackerModel.tblPaymentType" Role="tblPaymentType" Multiplicity="1" />
+          <End Type="ExpenseTrackerModel.tblExpenseRecord" Role="tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPaymentType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblExpens__UserI__5CD6CB2B">
+          <End Type="ExpenseTrackerModel.tblUser" Role="tblUser" Multiplicity="1" />
+          <End Type="ExpenseTrackerModel.tblExpenseRecord" Role="tblExpenseRecord" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="uId" />
+            </Principal>
+            <Dependent Role="tblExpenseRecord">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ExpenseTrackerModelStoreContainer" CdmEntityContainer="ExpenseTrackerEntities">
+          <EntitySetMapping Name="tblAccounts">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblAccount">
+              <MappingFragment StoreEntitySet="tblAccount">
+                <ScalarProperty Name="aId" ColumnName="aId" />
+                <ScalarProperty Name="cId" ColumnName="cId" />
+                <ScalarProperty Name="openDate" ColumnName="openDate" />
+                <ScalarProperty Name="closeDate" ColumnName="closeDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCustomers">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblCustomer">
+              <MappingFragment StoreEntitySet="tblCustomer">
+                <ScalarProperty Name="cId" ColumnName="cId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="uId" ColumnName="uId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblExpenseCategories">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblExpenseCategory">
+              <MappingFragment StoreEntitySet="tblExpenseCategory">
+                <ScalarProperty Name="ecId" ColumnName="ecId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblExpenseItems">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblExpenseItem">
+              <MappingFragment StoreEntitySet="tblExpenseItem">
+                <ScalarProperty Name="eiId" ColumnName="eiId" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ecId" ColumnName="ecId" />
+                <ScalarProperty Name="uId" ColumnName="uId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMonths">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblMonth">
+              <MappingFragment StoreEntitySet="tblMonth">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MonthName" ColumnName="MonthName" />
+                <ScalarProperty Name="uId" ColumnName="uId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPaymentTypes">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblPaymentType">
+              <MappingFragment StoreEntitySet="tblPaymentType">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="PaymentTypeName" ColumnName="PaymentTypeName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblUser">
+              <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="uId" ColumnName="uId" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblExpenseRecords">
+            <EntityTypeMapping TypeName="ExpenseTrackerModel.tblExpenseRecord">
+              <MappingFragment StoreEntitySet="tblExpenseRecord">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="expitemId" ColumnName="expitemId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ecId" ColumnName="ecId" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+                <ScalarProperty Name="MonthId" ColumnName="MonthId" />
+                <ScalarProperty Name="erId" ColumnName="erId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

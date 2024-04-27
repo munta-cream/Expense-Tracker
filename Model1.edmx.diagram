@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2cbee4aa3ff44826b9a370e065fe19f7" Name="Diagram1">
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblAccount" Width="1.5" PointX="5.25" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblCustomer" Width="1.5" PointX="3" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblExpenseCategory" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblExpenseItem" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblMonth" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblPaymentType" Width="1.5" PointX="3" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblUser" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblAccount__cId__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblCustomer__uId__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpens__UserI__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpense__ecId__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpenseI__uId__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblMonth__uId__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblPaymen__UserI__4222D4EF" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ExpenseTrackerModel.tblExpenseRecord" Width="1.5" PointX="7.5" PointY="7" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpense__ecId__5DCAEF64" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpens__expit__5EBF139D" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpens__Month__5FB337D6" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpens__Payme__60A75C0F" />
+        <AssociationConnector Association="ExpenseTrackerModel.FK__tblExpens__UserI__5CD6CB2B" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
